@@ -7,12 +7,22 @@ import pygame as pg
 estado = ANDAMENTO
 tabuleiroReal = Tabuleiro(LINHAS, COLUNAS)
 
-#Basta trocar qual classe do agente aqui para ajustar ordem ou colocar IA x IA ou jogador x jogador
+# Basta trocar qual classe do agente aqui para ajustar ordem ou colocar IA x IA ou jogador x jogador
 agentes = [Jogador(AGENTE_1), AgenteIA(AGENTE_2)]
 
 pg.init()
 tela = pg.display.set_mode((LARGURA_DISPLAY, ALTURA_DISPLAY))
 pg.display.set_caption("Connect 4 - Inteligência Artificial")
+
+def esperar_tecla():
+    esperando = True
+    while esperando:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                quit()
+            if event.type == pg.KEYDOWN:
+                esperando = False
 
 if __name__ == "__main__":
 
@@ -23,10 +33,13 @@ if __name__ == "__main__":
         for agente in agentes:
 
             agente.jogar(tabuleiroReal, tela)
-            estado = tabuleiroReal.verificaEstado(agente.getId())    
+            estado = tabuleiroReal.verificaEstado(agente.getId())
 
             if estado == VITORIA or estado == EMPATE:
                 tabuleiroReal.anunciaEstado(tela, estado, agente.getId())
 
-                hold = input(" ") #Segurar a tela aberta até algum imput do usuario
+                esperar_tecla()  # Esperar até que uma tecla seja pressionada
                 break
+
+    pg.quit()
+ 
